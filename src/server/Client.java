@@ -1,11 +1,15 @@
 package server;
 
+import com.google.gson.Gson;
+import data.programs.Discipline;
+import data.programs.Tutor;
 import debug.Console;
 import enums.HTTPMethod;
 import http.HTTPRequest;
 import utilities.GlobalMethods;
 import utilities.GlobalVars;
 
+import java.io.IOException;
 import java.net.Socket;
 
 /** Пример клиента-администратора.

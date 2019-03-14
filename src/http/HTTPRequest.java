@@ -1,5 +1,6 @@
 package http;
 
+import debug.Console;
 import enums.HTTPMethod;
 import exceptions.MethodNotSupportedException;
 import exceptions.NotImplementedException;

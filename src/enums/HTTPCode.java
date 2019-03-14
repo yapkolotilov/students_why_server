@@ -5,7 +5,7 @@ import exceptions.NotImplementedException;
 /** Код ответа сервера.
  *
  */
-public enum HTTPCode {
+public enum  HTTPCode {
     OK_200("200 OK"), BAD_REQUEST_400("400 Bad Request"), NOT_FOUND_404("404 Not Found"),
     METHOD_NOT_ALLOWED_405("405 Method Not Allowed"), INTERNAL_SERVER_ERROR_500("500 Internal Server Error");
 

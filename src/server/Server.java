@@ -1,6 +1,7 @@
 package server;
 
 
+import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import data.items.ItemList;
 import data.items.StudentsWhyTree;
 import data.personalData.PersonalDataList;
@@ -19,7 +20,8 @@ import java.net.ServerSocket;
 public class Server {
     static ProgramTree programs; // Образовательные программы.
     static PersonalDataList userPasswords; // Пароли пользователей.
-    static PersonalDataList adminPasswords; // Пароли администраторов.Session
+    static PersonalDataList adminPasswords; // Пароли администраторов.
+
     static ItemList newsFeed; // Новостная лента.
     static StudentsWhyTree studentsWhy;
 

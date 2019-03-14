@@ -1,6 +1,8 @@
 package enums;
 
+import com.sun.org.apache.regexp.internal.RE;
 import exceptions.MethodNotSupportedException;
+import exceptions.NotImplementedException;
 
 /** Методы HTTP-запроса.
  */

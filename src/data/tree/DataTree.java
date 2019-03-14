@@ -3,7 +3,7 @@ package data.tree;
 import exceptions.DuplicateElemException;
 import exceptions.NoSuchElemException;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
