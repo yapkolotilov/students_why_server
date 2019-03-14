@@ -44,3 +44,35 @@ public class Server {
         newsFeed = ItemList.readFromFile(new FilePath("res", "virtual", "newsFeed.list"));
         studentsWhy = StudentsWhyTree.readFromFile(new FilePath("res", "virtual", "studentsWhy.why"));
 
+        // Выводим информацию о данных:
+        Console.println("Программы:");
+        Console.println(programs + "\n");
+        Console.println("Вопросы:");
+        Console.println(studentsWhy + "\n");
+        Console.println("Новости:");
+        Console.println(newsFeed + "\n");
+
+
+        // Запускаем сервер:
+        try {
+            serverSocket = new ServerSocket(GlobalVars.serverPort, 0, InetAddress.getByName(args[0]));
+
+            Console.printlnln("Сервер запущен.");
+        } catch (IOException e) {
+            Console.println("ОШИБКА ПРИ ЗАПУСКЕ СЕРВЕРА!");
+            e.printStackTrace();
+            return;
+        }
+
+        // Слушаем подключения:
+        int id = 0;
+        while (true) {
+            try {
+                new Session(serverSocket.accept(), id++);
+            } catch (IOException e) {
+                Console.println("ОШИБКА ПРИ СОЗДАНИИ СЕССИИ!");
+                e.printStackTrace();
+            }
+        }
+    }
+}
