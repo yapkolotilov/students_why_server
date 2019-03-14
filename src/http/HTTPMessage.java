@@ -1,9 +1,7 @@
 package http;
 
-import debug.Console;
 import exceptions.StringFormatException;
 
-import java.util.IllegalFormatException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,8 +14,6 @@ public abstract class HTTPMessage {
     protected Headers headers = new Headers(); // Заголовки запроса.
     protected Params params = new Params(); // Параметры запроса.
     protected byte[] body = new byte[0]; // Тело запроса.
-
-    // Геттеры и сеттеры.
 
     // Заголовки:
 
@@ -111,7 +107,7 @@ public abstract class HTTPMessage {
     }
 
 
-    // --- Классы ---
+    // --- Вложенные классы ---
     /** Представляет список заголовков и их значений.
      */
     protected class Headers extends LinkedHashMap<String, String> {
