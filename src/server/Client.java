@@ -21,7 +21,9 @@ public class Client {
             // -451735726 - суперадмин
             Socket socket = new Socket(args[0], GlobalVars.serverPort);
 
-            HTTPRequest request = new HTTPRequest(HTTPMethod.PUT, "/");
+            HTTPRequest request = new HTTPRequest(HTTPMethod.POST, "/");
+            request.setHeader("Action", "Log-In");
+            request.setHeader("Token", "-451735726");
             // Сюда добавить заголовки.
 
 

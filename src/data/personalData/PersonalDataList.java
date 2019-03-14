@@ -16,10 +16,11 @@ public class PersonalDataList implements Serializable {
 
     private  FilePath path; // Путь к файлу.
     LinkedList<PersonalData> personalDatas = new LinkedList<>(); // Пароли.
-    public static final PersonalData sudoData = new PersonalData("sudoLogin", "sudoPassword", generateToken("sudoLogin", "sudoPassword"));
+    public static final PersonalData sudoData = new PersonalData("sudo", "sudoPassword", generateToken("sudoLogin", "sudoPassword"));
 
     private PersonalDataList(FilePath path) {
         this.path = path;
+        Console.println(sudoData.getToken());
     }
 
 

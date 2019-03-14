@@ -390,7 +390,7 @@ public class Session extends Thread {
         result.setBody("Отсутствует заголовок Action!");
         return result;
     }
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedREMOVE() {
         FilePath path = request.getPath();
         if (path.get(1).equals("public")) {
@@ -470,6 +470,7 @@ public class Session extends Thread {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedLogIn() {
         if (!checkHeaders("Login", "Password")) {
             if (!checkHeaders("Token")) {
@@ -479,6 +480,19 @@ public class Session extends Thread {
             } else {
                 String token = request.getHeader("Token");
                 HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+
+                // Логин как суперадмин:
+
+                if (PersonalDataList.validateSudo(token)) {
+                    response.setResult(Result.SUCCESS);
+                    response.setHeader("Type", "Admin");
+                    response.setParam("login", "sudoLogin");
+                    response.setParam("name", "Суперадмин");
+                    response.setParam("token", token);
+
+                    return response;
+                }
+
                 // Логин как обычный юзер:
                 if (Server.userPasswords.validate(token)) {
                     try {
@@ -642,7 +656,7 @@ public class Session extends Thread {
 
 
     /// --- PUT ---
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveUser() {
         if (!checkHeaders("Token")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -704,6 +718,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddUserToProgram() {
         if (!checkHeaders("Token", "Login", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -744,6 +759,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveUserFromProgram() {
         if (!checkHeaders("Token", "Login", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -824,7 +840,7 @@ public class Session extends Thread {
         return response;
     }
 
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddAdmin() {
         if (!checkHeaders("Token", "Login")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -867,6 +883,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveAdmin() {
         if (!checkHeaders("Token", "Login")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -911,6 +928,7 @@ public class Session extends Thread {
     }
 
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddProgram() {
         if (!checkHeaders("Token", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -991,6 +1009,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveProgram() {
         if (!checkHeaders("Token", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1069,7 +1088,7 @@ public class Session extends Thread {
         return response;
     }
 
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddTutor() {
         if (!checkHeaders("Token", "Program") || request.getBody() == null || request.getBody().length == 0) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1118,6 +1137,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedChangeTutor() {
         if (!checkHeaders("Token", "Tutor") || request.getBody() == null || request.getBody().length == 0) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1164,6 +1184,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRebaseTutor() {
         if (!checkHeaders("Token", "Tutor", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1204,6 +1225,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddTutorToProgram() {
         if (!checkHeaders("Token", "Tutor", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1244,6 +1266,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveTutorFromProgram() {
         if (!checkHeaders("Token", "Tutor", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1284,6 +1307,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveTutor() {
         if (!checkHeaders("Token", "Tutor")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1319,7 +1343,7 @@ public class Session extends Thread {
         return response;
     }
 
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddDiscipline() {
         if (!checkHeaders("Token", "Program") || request.getBody() == null || request.getBody().length == 0) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1365,6 +1389,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedChangeDiscipline() {
         if (!checkHeaders("Token", "Discipline") || request.getBody() == null || request.getBody().length == 0) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1411,6 +1436,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRebaseDiscipline() {
         if (!checkHeaders("Token", "Discipline", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1451,6 +1477,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddDisciplineToProgram() {
         if (!checkHeaders("Token", "Discipline", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1491,6 +1518,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveDisciplineFromProgram() {
         if (!checkHeaders("Token", "Discipline", "Program")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1531,6 +1559,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveDiscipline() {
         if (!checkHeaders("Token", "Discipline")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1566,7 +1595,7 @@ public class Session extends Thread {
         return response;
     }
 
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddItem() {
         if (!checkHeaders("Token") || request.getBody() == null || request.getBody().length == 0) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1608,6 +1637,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddEvent() {
         if (!checkHeaders("Token") || request.getBody() == null || request.getBody().length == 0) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1779,6 +1809,7 @@ public class Session extends Thread {
 
     // --- GET ---
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetUsers() {
         if (!checkHeaders("Token")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1863,6 +1894,7 @@ public class Session extends Thread {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetUser() {
         if (!checkHeaders("Token")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1930,7 +1962,7 @@ public class Session extends Thread {
         }
     }
 
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetUsersPrograms() {
         if (!checkHeaders("Token")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -1975,6 +2007,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetUsersTutors() {
         if (!checkHeaders("Token")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -2023,6 +2056,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetUsersDisciplines() {
         if (!checkHeaders("Token")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -2084,6 +2118,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetLastNews() {
         if (!checkHeaders("Number")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -2106,6 +2141,7 @@ public class Session extends Thread {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedGetLastEvents() {
         if (!checkHeaders("Number")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -2210,7 +2246,7 @@ public class Session extends Thread {
         }
     }
 
-
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedAddTag() {
         if (!checkHeaders("Token", "Tag")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
@@ -2254,6 +2290,7 @@ public class Session extends Thread {
         return response;
     }
 
+    @SuppressWarnings("Duplicates")
     private HTTPResponse proceedRemoveTag() {
         if (!checkHeaders("Token", "Tag")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
