@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /** Представляет обобщённый класс HTTP-сообщения.
- * 
  */
 public abstract class HTTPMessage {
     // --- Поля ---
