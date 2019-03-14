@@ -88,3 +88,111 @@ UML-диаграмма классов:
 **double longitude** - Долгота.  
 **String place** - Дополнительная информация о месте проведения.
 
+# Авторизация в системе
+
+## Регистрация в системе
+Регистрирует вас в системе. Возвращает токен авторизации.
+### Запрос
+> POST / HTTP/1.1  
+> Action: Register  
+> Login: {login}  
+> Password: {password}  
+> Name: {name}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+>
+> token={token}
+
+
+## Вход в систему
+Проверяет ваш логин и пароль. Возвращает логин, имя и токен.
+### Запрос
+> POST / HTTP/1.1  
+> Action: Log-In  
+> Login: {login}  
+> Password: {password} 
+
+или
+
+> POST / HTTP/1.1  
+> Action: Log-In  
+> Token: {token}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+> User-Type: {User/Admin}  
+>
+> login={login}&name={name}&token={token}
+
+
+## Смена персональных данных
+Меняет логин, пароль и имя. В случае, если не хотите менять всё сразу, отправьте старые данные.
+### Запрос
+> POST / HTTP/1.1  
+> Action: Change-Personal-Data  
+> Token: {token}  
+> New-Login: {Новый логин}  
+> New-Password: {Новый пароль}  
+> New-Name: {Новые ФИО}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+> User-Type: {user/admin}
+>
+> token={token}
+
+
+## Удаление пользователя
+Удаляет вас из системы.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Remove-User  
+> Token: {token}   
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+
+---
+# Управление пользователями
+
+## Получение пользователя
+Получает пользователя по его логину. Администратор может получить любого пользователя.
+### Запрос
+> GET res/virtual/programs/users/{login} HTTP/1.1  
+> Token: {token}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+>
+> {JSON-сериализованный пользователь}
+
+## Получение дерева пользователей (ADMIN)
+Возвращает JSON-дерево зарегистрированных пользователей.
+### Запрос
+> GET res/virtual/programs/users HTTP/1.1  
+> Token: {token}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+>
+> {JSON-дерево зарегистрированных пользователей}
+
+
+## Назначение нового администратора (ADMIN)
+Наделяет существующего пользователя правами администратора.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Add-Admin  
+> Token: {token}  
+> Login: {Логин нового администратора}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
