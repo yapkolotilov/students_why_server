@@ -479,3 +479,199 @@ UML-диаграмма классов:
 > Result: {result}  
 >
 > {JSON-сериализованная дисциплина}
+
+## Получение дерева дисциплин пользователя
+Получает JSON-дерево дисциплин пользователя (Администраторы могут получать деревья любого пользователя).
+### Запрос
+> GET res/virtual/programs/users/{login}/disciplines HTTP/1.1  
+> Token: {token}   
+
+### Ответ
+> HTTP/1.1 200 OK
+> Result: {result}  
+>
+> {JSON-дерево дисциплин}
+
+
+## Добавление дисциплины (ADMIN)
+Добавляет новую дисциплину в указанную программу.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Add-Discipline  
+> Discipline: {discipline}  
+> Program: {program}  
+>
+> {JSON-сериализованная дисциплина}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+
+## Изменение дисциплины (ADMIN)
+Изменяет дисциплину.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Change-Discipline  
+> Token: {token}  
+> Discipline: {discipline}  
+>
+> {JSON-сериализванная дисциплина}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+
+## Перемещение дисциплины (ADMIN)
+Перемещает дисциплину в другую образовательную программу.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Rebase-Discipline  
+> Token: {token}  
+> Discipline: {discipline}  
+> Program: {program}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+
+## Добавление дисциплины в образовательную программу (ADMIN)
+Добавляет существующую дисциплину в другую образовательную программу.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Add-Discipline-To-Program  
+> Token: {token}  
+> Discipline: {discipline}  
+> Program: {program}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+
+## Удаление дисциплины из образовательной программы (ADMIN)
+Удаляет существующую дисциплину из образовательной программы.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Remove-Discipline-From-Program  
+> Token: {token}  
+> Discipline: {discipline}  
+> Program: {program}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+
+## Удаление дисциплины (ADMIN)
+Удаляет существующую дисциплину.
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Remove-Discipline  
+> Token: {token}  
+> Discipline: {discipline}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+---
+# Работа с файлами
+
+## Добавление файла
+Добавляет новый файл на сервер.
+### Запрос
+> POST res/public HTTP/1.1  
+> Token: {token}  
+> File-Format: {расширение файла без точек и звездочек}
+>
+> {байтовое представление файла}
+
+## Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+>
+> {id файла}
+
+## Получение файла
+Получает файл по его идентификатору.
+### Запрос
+> GET res/public/{id файла} HTTP/1.1  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+>
+> {байтовое представление файла}
+
+## Удаление файла
+Удаляет файл с сервера.
+### Запрос
+> DELETE res/public/{id файла} HTTP/1.1  
+> Token: {token}  
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+
+---
+# Работа с новостями
+
+## Получение новостей
+Получает JSON-список всех новостей и событий.
+### Запрос
+> GET res/virtual/news HTTP/1.1  
+
+### Ответ
+> HTTP/1.1 200 OK  
+>
+> {JSON-список всех новостей и событий}
+
+
+## Получение событий
+Получает JSON-список всех событий.
+### Запрос
+> GET res/virtual/events HTTP/1.1  
+
+### Ответ
+> HTTP/1.1 200 OK  
+>
+> {JSON-список всех событий}
+
+
+## Получение последних n новостей
+Получает JSON-список последних n новостей и событий.
+### Запрос
+> GET res/virtual/news HTTP/1.1  
+> Number: {n}
+
+### Ответ
+> HTTP/1.1 200 OK  
+>
+> {JSON-список последних n новостей и событий}
+
+
+## Получение последних n событий
+Получает JSON-список всех событий.
+### Запрос
+> GET res/virtual/events HTTP/1.1  
+> Number: {n}
+
+### Ответ
+> HTTP/1.1 200 OK  
+>
+> {JSON-список последних n событий}
+
+
+## Получение новости
+Получает новость по её названию.
+### Запрос
+> GET res/virtual/news/{item} HTTP/1.1   
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}  
+>
+> {JSON-сериализованная новость}
