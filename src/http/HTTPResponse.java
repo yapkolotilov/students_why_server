@@ -72,6 +72,7 @@ public class HTTPResponse extends HTTPMessage {
      * @param line Строка.
      * @return Ответ.
      */
+    @SuppressWarnings("Duplicates")
     public static HTTPResponse parseString(String line) throws StringFormatException, CodeNotSupportedException {
         line = line.replace("\r", "");
         if (!line.contains("\n\n"))
