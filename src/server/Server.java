@@ -20,7 +20,6 @@ public class Server {
     static ProgramTree programs; // Образовательные программы.
     static PersonalDataList userPasswords; // Пароли пользователей.
     static PersonalDataList adminPasswords; // Пароли администраторов.
-
     static ItemList newsFeed; // Новостная лента.
     static StudentsWhyTree studentsWhy;
 
