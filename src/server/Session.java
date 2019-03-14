@@ -1573,3 +1573,1135 @@ public class Session extends Thread {
             response.setBody("Нужен заголовок Token и новость в теле сообщения!");
             return response;
         }
+
+        String token = request.getHeader("Token");
+        String itemStr = new String(request.getBody());
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Gson gson = new Gson();
+                Item item = gson.fromJson(itemStr, Item.class);
+                Server.newsFeed.add(item);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Уже есть новость с таким заголовком!");
+                return response;
+            } catch (JsonSyntaxException e) {
+                response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+                response.setBody("Неправильный формат преподавателя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("Добавлять новости могут только администраторы!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedAddEvent() {
+        if (!checkHeaders("Token") || request.getBody() == null || request.getBody().length == 0) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужен заголовок Token и новость в теле сообщения!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String eventStr = new String(request.getBody());
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Gson gson = new Gson();
+                Event event = gson.fromJson(eventStr, Event.class);
+                Server.newsFeed.add(event);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Уже есть событие с таким заголовком!");
+                return response;
+            } catch (JsonSyntaxException e) {
+                response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+                response.setBody("Неправильный формат преподавателя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("Добавлять события могут только администраторы!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedChangeItem() {
+        if (!checkHeaders("Token", "Item") || request.getBody() == null || request.getBody().length == 0) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Item и новость в теле!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String itemName = request.getHeader("Item");
+        String itemStr = new String(request.getBody());
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Gson gson = new Gson();
+                Item item = gson.fromJson(itemStr, Item.class);
+                Server.newsFeed.change(itemName, item);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет новости с таким заголовком!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Уже существует новость с таким заголовком!");
+                return response;
+            } catch (JsonSyntaxException e) {
+                response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+                response.setBody("Неправильный формат преподавателя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("Только администраторы могут редактировать новости!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedChangeEvent() {
+        if (!checkHeaders("Token", "Event") || request.getBody() == null || request.getBody().length == 0) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Event и событие в теле!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String eventName = request.getHeader("Event");
+        String eventStr = new String(request.getBody());
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Gson gson = new Gson();
+                Event event = gson.fromJson(eventStr, Event.class);
+                Server.newsFeed.change(eventName, event);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет новости с таким заголовком!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Уже существует новость с таким заголовком!");
+                return response;
+            } catch (JsonSyntaxException e) {
+                response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+                response.setBody("Неправильный формат преподавателя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("Только администраторы могут редактировать события!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedRemoveItem() {
+        if (!checkHeaders("Token", "Item")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Item!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String itemName = request.getHeader("Item");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.newsFeed.remove(itemName);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.ALREADY_DONE);
+                response.setBody("Нет такой новости!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.FAIL);
+            response.setBody("У вас недостаточно прав для удаления новости!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+
+    // --- GET ---
+
+    private HTTPResponse proceedGetUsers() {
+        if (!checkHeaders("Token")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Не хватает заголовка Token!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            response.setResult(Result.SUCCESS);
+            response.setBody(Server.programs.getUsersJson());
+            return response;
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для доступа к данному документу!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedGetTutors() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        response.setBody(Server.programs.getTutorsJson());
+        return response;
+    }
+
+    private HTTPResponse proceedGetPrograms() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        response.setBody(Server.programs.getProgramsJson());
+        return response;
+    }
+
+    private HTTPResponse proceedGetDisciplines() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        response.setBody(Server.programs.getDisciplinesJson());
+        return response;
+    }
+
+
+    private HTTPResponse proceedGetProgram() {
+        FilePath path = request.getPath();
+        String programName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            DataTreeNode progam = Server.programs.getProgram(programName);
+            String body = new Gson().toJson(progam);
+
+            response.setResult(Result.SUCCESS);
+            response.setBody(body);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("В системе нет такой программы!");
+            return response;
+        }
+    }
+
+    private HTTPResponse proceedGetDiscipline() {
+        FilePath path = request.getPath();
+        String disciplineName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            Discipline discipline = Server.programs.getDiscipline(disciplineName);
+            String body = new Gson().toJson(discipline);
+
+            response.setResult(Result.SUCCESS);
+            response.setBody(body);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("В системе нет такой дисциплины!");
+            return response;
+        }
+    }
+
+    private HTTPResponse proceedGetUser() {
+        if (!checkHeaders("Token")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        FilePath path = request.getPath();
+        String login = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                User user = Server.programs.getUser(login);
+                String body = new Gson().toJson(user);
+
+                response.setResult(Result.SUCCESS);
+                response.setBody(body);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет пользователя с таким логином!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            try {
+                login = Server.userPasswords.getByToken(token).getLogin();
+                User user = Server.programs.getUser(login);
+                String body = new Gson().toJson(user);
+
+                response.setResult(Result.SUCCESS);
+                response.setBody(body);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет пользователя с таким логином!");
+                return response;
+            }
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неверные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedGetTutor() {
+        FilePath path = request.getPath();
+        String tutorName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            Tutor tutor = Server.programs.getTutor(tutorName);
+            String body = new Gson().toJson(tutor);
+
+            response.setResult(Result.SUCCESS);
+            response.setBody(body);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("В системе нет такого преподавателя!");
+            return response;
+        }
+    }
+
+
+    private HTTPResponse proceedGetUsersPrograms() {
+        if (!checkHeaders("Token")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        FilePath path = request.getPath();
+        String login = path.get(path.size() - 2);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                String body = Server.programs.getUsersProgramsJSON(login);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("В системе нет такого пользователя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            try {
+                login = Server.userPasswords.getByToken(token).getLogin();
+                String body = Server.programs.getUsersProgramsJSON(login);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("В системе нет такого пользователя!");
+                return response;
+            }
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неверные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedGetUsersTutors() {
+        if (!checkHeaders("Token")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        FilePath path = request.getPath();
+        String login = path.get(path.size() - 2);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                String body = Server.programs.getUsersTutorsJSON(login);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("В системе нет такого пользователя!");
+                return response;
+            } catch (DuplicateElemException e) {
+                return new HTTPResponse(HTTPCode.INTERNAL_SERVER_ERROR_500);
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            try {
+                login = Server.userPasswords.getByToken(token).getLogin();
+                String body = Server.programs.getUsersTutorsJSON(login);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("В системе нет такого пользователя!");
+                return response;
+            } catch (DuplicateElemException e) {
+                return new HTTPResponse(HTTPCode.INTERNAL_SERVER_ERROR_500);
+            }
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неверные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedGetUsersDisciplines() {
+        if (!checkHeaders("Token")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        FilePath path = request.getPath();
+        String login = path.get(path.size() - 2);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                String body = Server.programs.getUsersDisciplinesJSON(login);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("В системе нет такой дисциплины!");
+                return response;
+            } catch (DuplicateElemException e) {
+                return new HTTPResponse(HTTPCode.INTERNAL_SERVER_ERROR_500);
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            try {
+                login = Server.userPasswords.getByToken(token).getLogin();
+                String body = Server.programs.getUsersDisciplinesJSON(login);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("В системе нет такого пользователя!");
+                return response;
+            } catch (DuplicateElemException e) {
+                return new HTTPResponse(HTTPCode.INTERNAL_SERVER_ERROR_500);
+            }
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неверные данные!");
+        return response;
+    }
+
+
+    private HTTPResponse proceedGetNews() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        response.setBody(Server.newsFeed.getItemsJson());
+        return response;
+    }
+
+    private HTTPResponse proceedGetEvents() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        response.setBody(Server.newsFeed.getEventsJson());
+        return response;
+    }
+
+    private HTTPResponse proceedGetLastNews() {
+        if (!checkHeaders("Number")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужен заголовок Number!");
+            return response;
+        }
+
+        try {
+            int number = Integer.parseInt(request.getHeader("Number"));
+            if (number < 0)
+                throw new NumberFormatException();
+
+            HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.SUCCESS);
+            response.setBody(Server.newsFeed.getLastItemsJson(number));
+            return response;
+        } catch (NumberFormatException e) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Неправильный формат числа!");
+            return response;
+        }
+    }
+
+    private HTTPResponse proceedGetLastEvents() {
+        if (!checkHeaders("Number")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужен заголовок Number!");
+            return response;
+        }
+
+        try {
+            int number = Integer.parseInt(request.getHeader("Number"));
+            if (number < 0)
+                throw new NumberFormatException();
+
+            HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.SUCCESS);
+            response.setBody(Server.newsFeed.getLastEventsJson(number));
+            return response;
+        } catch (NumberFormatException e) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Неправильный формат числа!");
+            return response;
+        }
+    }
+
+
+    private HTTPResponse proceedGetItem() {
+        FilePath path = request.getPath();
+        String itemName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            Gson gson = new Gson();
+            Item item = Server.newsFeed.getItem(itemName);
+
+            response.setResult(Result.SUCCESS);
+            response.setBody(gson.toJson(item));
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("Нет такой новости!");
+            return response;
+        }
+    }
+
+    private HTTPResponse proceedGetEvent() {
+        FilePath path = request.getPath();
+        String eventName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            Gson gson = new Gson();
+            Event event = Server.newsFeed.getEvent(eventName);
+            response.setBody(gson.toJson(event));
+            response.setResult(Result.SUCCESS);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("Нет новости с таким заголовком!");
+            return response;
+        }
+    }
+
+
+    private HTTPResponse proceedGetTags() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.SUCCESS);
+        response.setBody(Server.studentsWhy.getTagsJson());
+        return response;
+    }
+
+    private HTTPResponse proceedGetTag() {
+        FilePath path = request.getPath();
+        String tagName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            DataTreeNode tag = Server.studentsWhy.getTag(tagName);
+            Gson gson = new Gson();
+            String body = gson.toJson(tag);
+
+            response.setResult(Result.SUCCESS);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("Нет такого тега!");
+            return response;
+        }
+    }
+
+    private HTTPResponse proceedGetQuestionsTags() {
+        FilePath path = request.getPath();
+        String question = path.get(path.size() - 2);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            String body = Server.studentsWhy.getQuestionsTagsJSON(question);
+
+            response.setResult(Result.SUCCESS);
+            response.setBody(body);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("Нет такого вопроса!");
+            return response;
+        }
+    }
+
+
+    private HTTPResponse proceedAddTag() {
+        if (!checkHeaders("Token", "Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Tag!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String tag = request.getHeader("Tag");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                if (request.containsHeader("Base-Tag")) {
+                    String baseTag = request.getHeader("Base-Tag");
+                    Server.studentsWhy.addNewTag(tag, baseTag);
+                }
+                Server.studentsWhy.addNewTag(tag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого тега!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.ALREADY_DONE);
+                response.setBody("В системе уже есть такой тег!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для добавления тега!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedRemoveTag() {
+        if (!checkHeaders("Token", "Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Tag!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String tag = request.getHeader("Tag");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.removeTag(tag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e ) {
+                response.setResult(Result.ALREADY_DONE);
+                response.setBody("Нет такого тега!");
+                return response;
+            } catch (DuplicateElemException e) {
+                e.printStackTrace();
+                response.setResult(Result.FAIL);
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для удаления тега!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedRebaseTag() {
+        if (!checkHeaders("Token", "Tag", "Base-Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Tag, Base-Tag!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String tag = request.getHeader("Tag");
+        String baseTag = request.getHeader("Base-Tag");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.rebaseTag(tag, baseTag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого тега!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.ALREADY_DONE);
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для перемещения тега!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedChangeTag() {
+        if (!checkHeaders("Token", "Tag", "New-Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Tag, New-Tag!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String tag = request.getHeader("Tag");
+        String newTag = request.getHeader("New-Tag");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.changeTag(tag, newTag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого тега!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Уже есть такой тег!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для редактирования тега!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+
+    private HTTPResponse proceedGetQuestions() {
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.SUCCESS);
+        response.setBody(Server.studentsWhy.getQuestionsJson());
+        return response;
+    }
+
+    private HTTPResponse proceedGetQuestion() {
+        FilePath path = request.getPath();
+        String questionName = path.get(path.size() - 1);
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        try {
+            Item question = Server.studentsWhy.getQuestion(questionName);
+            Gson gson = new Gson();
+            String body = gson.toJson(question);
+
+            response.setResult(Result.SUCCESS);
+            return response;
+        } catch (NoSuchElemException e) {
+            response.setResult(Result.FAIL);
+            response.setBody("Нет такого вопроса!");
+            return response;
+        }
+    }
+
+    private HTTPResponse proceedAddQuestion() {
+        if (!checkHeaders("Token") || request.getBody() == null || request.getBody().length == 0) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужнен заголовок Token!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String questionStr = new String(request.getBody());
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Gson gson = new Gson();
+                Item question = gson.fromJson(questionStr, Item.class);
+
+                if (request.containsHeader("Tag")) {
+                    String tag = request.getHeader("Tag");
+                    Server.studentsWhy.addNewQuestion(question.getHeader(), question, tag);
+                } else
+                    Server.studentsWhy.addNewQuestion(question.getHeader(), question);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Такой вопрос уже существует!");
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого тега!");
+                return response;
+            } catch (JsonSyntaxException e) {
+                response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+                response.setBody("Неправильный формат преподавателя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для добавления вопроса!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedChangeQuestion() {
+        if (!checkHeaders("Token", "Question") || request.getBody() == null || request.getBody().length == 0) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Question!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String questionName = request.getHeader("Question");
+        String questionStr = new String(request.getBody());
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Gson gson = new Gson();
+                Item question = gson.fromJson(questionStr, Item.class);
+                Server.studentsWhy.changeQuestion(questionName, question);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого вопроса!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Такой вопрос уже существует!");
+                return response;
+            } catch (JsonSyntaxException e) {
+                response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+                response.setBody("Неправильный формат преподавателя!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для изменения вопроса!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedRebaseQuestion() {
+        if (!checkHeaders("Token", "Question", "Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Question, Tag!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String question = request.getHeader("Question");
+        String tag = request.getHeader("Tag");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.rebaseQuestion(question, tag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого вопроса!");
+                return response;
+            } catch (DuplicateElemException e) {
+                e.printStackTrace();
+                return new HTTPResponse(HTTPCode.INTERNAL_SERVER_ERROR_500);
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для перемещения вопроса!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedAddQuestionToTag() {
+        if (!checkHeaders("Token", "Question", "Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Question, Tag!");
+            return response;
+        }
+
+        String tag = request.getHeader("Tag");
+        String question = request.getHeader("Question");
+        String token = request.getHeader("Token");
+
+        HTTPResponse response =new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.addQuestionToTag(question, tag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого вопроса или тега!");
+                return response;
+            } catch (DuplicateElemException e) {
+                response.setResult(Result.ALREADY_DONE);
+                response.setBody("Данный вопрос уже принадлежит к этому тегу!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для добавления вопроса в тег!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неверные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedRemoveQuestionFromTag() {
+        if (!checkHeaders("Token", "Question", "Tag")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Question, Tag!");
+            return response;
+        }
+
+        String question = request.getHeader("Question");
+        String tag = request.getHeader("Tag");
+        String token = request.getHeader("Token");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.removeQuestionFromTag(question, tag);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого вопроса или тега!");
+                return response;
+            } catch (DuplicateElemException e) {
+                e.printStackTrace();
+                return new HTTPResponse(HTTPCode.INTERNAL_SERVER_ERROR_500);
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для удаления вопроса из тега!");
+            return response;
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+    private HTTPResponse proceedRemoveQuestion() {
+        if (!checkHeaders("Token, Question")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Question!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String question = request.getHeader("Question");
+
+        HTTPResponse response = new HTTPResponse(HTTPCode.OK_200);
+        if (Server.adminPasswords.validate(token)) {
+            try {
+                Server.studentsWhy.removeQuestion(question);
+
+                response.setResult(Result.SUCCESS);
+                return response;
+            } catch (NoSuchElemException e) {
+                response.setResult(Result.FAIL);
+                response.setBody("Нет такого вопроса!");
+                return response;
+            }
+        }
+
+        if (Server.userPasswords.validate(token)) {
+            response.setResult(Result.NO_RIGHTS);
+            response.setBody("У вас недостаточно прав для ");
+        }
+
+        response.setResult(Result.FAIL);
+        response.setBody("Неправильные данные!");
+        return response;
+    }
+
+
+    // --- Служебные методы ---
+
+    /** Проверяет заголовки на наличие в запросе.
+     *
+     * @param headerNames заголовки.
+     * @return Есть ли такие заголовки.
+     */
+    private boolean checkHeaders(String... headerNames) {
+        for (String eachHeaderName: headerNames)
+            if (!request.containsHeader(eachHeaderName))
+                return false;
+        return true;
+    }
+
+    /** Отправляет клиенту ответ.
+     *
+     * @param response Ответ.
+     */
+    private void sendResponse(HTTPResponse response) {
+        printlnMessage("Сформирован ответ:");
+        Console.printlnln(response);
+        try {
+            outputStream.write(response.getBytes());
+            clientSocket.close();
+            outputStream.flush();
+        } catch (IOException e) {
+            printlnlnMessage("ОШИБКА ПРИ ОТПРАВКЕ ОТВЕТА!");
+            e.printStackTrace();
+        }
+        printlnlnMessage("Завершена.");
+
+    }
+
+    private void printlnMessage(Object text, Object... vars) {
+        String message = String.format(text.toString(), vars);
+        message = String.format("Сессия #%s: %s", id, message);
+        Console.println(message);
+    }
+
+    private void printlnlnMessage(Object text, Object... vars) {
+        printlnMessage(text + "\n", vars);
+    }
+
+    /** Возвращает идентификатор файла.
+     *
+     * @param content Содержимое файла.
+     * @return идентификатор файла.
+     */
+    private String getFileID(String content) {
+        int hash = 7;
+        for (int i = 0; i < content.length(); i++) {
+            if (i == 1000)
+                break;
+            hash = hash*31 + content.charAt(i);
+        }
+        return "" + hash;
+    }
+}
