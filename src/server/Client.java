@@ -8,7 +8,7 @@ import utilities.GlobalVars;
 
 import java.net.Socket;
 
-/** Пример клиента-администратора. 
+/** Пример клиента-администратора.
  */
 public class Client {
     public static void main(String[] args) {
