@@ -7,6 +7,9 @@ import exceptions.NotImplementedException;
 import exceptions.StringFormatException;
 import utilities.FilePath;
 
+import java.net.URL;
+import java.net.URLDecoder;
+
 /** Представляет HTTP-запрос от клиента серверу.
  *
  */
@@ -94,6 +97,7 @@ public class HTTPRequest extends HTTPMessage {
             result.body = body.getBytes();
         }
 
+        result.url = URLDecoder.decode(result.url);
         return result;
     }
 
