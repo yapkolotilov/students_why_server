@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Client">
+    <output-path>$PROJECT_DIR$/out/artifacts/Client</output-path>
+    <root id="archive" name="StudentsWhyServer.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/Metas/ClientMeta/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="StudentsWhyServer" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jars/gson-2_6_2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
