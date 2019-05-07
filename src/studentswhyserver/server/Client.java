@@ -46,11 +46,11 @@ public class Client {
                     String[] values = line.split(" -\\S+ ");
 
                     // Конструируем запрос:
-                    System.out.println(Arrays.toString(values));
+//                    System.out.println(Arrays.toString(values));
                     int i = 1;
                     while (matcher.find()) {
                         String name = matcher.group().substring(2); // Название заголовка.
-                        System.out.println(name);
+//                        System.out.println(name);
                         String value = values[i++];
 
                         if (name.equals("Body"))
@@ -60,7 +60,6 @@ public class Client {
                     }
                     Socket socket = new Socket(args[0], 80);
                     socket.getOutputStream().write(request.getBytes());
-                    socket.close();
 
                     // Считываем ответ:
                     String responseStr = "";
@@ -70,6 +69,7 @@ public class Client {
                     HTTPResponse response = HTTPResponse.parseString(responseStr);
                     System.out.println(response);
                     System.out.println();
+                    socket.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Неправильный запрос! Повторите попытку:");
