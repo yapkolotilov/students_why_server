@@ -7,6 +7,7 @@ import studentswhyserver.exceptions.StringFormatException;
 import studentswhyserver.utilities.FilePath;
 
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 
 /** Представляет HTTP-запрос от клиента серверу.
  *
@@ -104,7 +105,7 @@ public class HTTPRequest extends HTTPMessage {
      * @return байтовое представление запроса.
      */
     public byte[] getBytes() {
-        return toString().getBytes();
+        return toString().getBytes(Charset.forName("UTF-8"));
     }
 
     /** Восстанавливает путь к файлу из URL.

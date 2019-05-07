@@ -5,6 +5,8 @@ import studentswhyserver.enums.Result;
 import studentswhyserver.exceptions.CodeNotSupportedException;
 import studentswhyserver.exceptions.StringFormatException;
 
+import java.nio.charset.Charset;
+
 /** Представляет HTTP-ответ сервера клиенту.
  *
  */
@@ -32,6 +34,13 @@ public class HTTPResponse extends HTTPMessage {
 
 
     // --- Методы ---
+
+    @Override
+    public void setParam(String name, Object value) {
+        body = null;
+        params.put(name, value.toString());
+        setHeader("Content-Length", params.toString().getBytes().length);
+    }
 
     /** Устанавливает значение заголовка Result.
      *
@@ -64,7 +73,7 @@ public class HTTPResponse extends HTTPMessage {
      * @return байтовое представление запроса.
      */
     public byte[] getBytes() {
-        return toString().getBytes();
+        return toString().getBytes(Charset.forName("UTF-8"));
     }
 
     /** Восстанавливает ответ из строки.
@@ -75,7 +84,7 @@ public class HTTPResponse extends HTTPMessage {
     public static HTTPResponse parseString(String line) throws StringFormatException, CodeNotSupportedException {
         line = line.replace("\r", "");
         if (!line.contains("\n\n"))
-            throw new StringFormatException("В запросе отсутствует CRLF!");
+            throw new StringFormatException("В запросе отсутствует CRLF! Запрос:\n" + line + "'");
 
         HTTPResponse result = new HTTPResponse();
         String[] parts = line.split("\n\n");

@@ -8,8 +8,11 @@ import studentswhyserver.http.HTTPResponse;
 import studentswhyserver.utilities.GlobalMethods;
 import studentswhyserver.utilities.GlobalVars;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -56,7 +59,11 @@ public class Client {
                     socket.getOutputStream().write(request.getBytes());
 
                     // Считываем ответ:
-                    HTTPResponse response = HTTPResponse.parseString(GlobalMethods.readStrResponse(socket.getInputStream()));
+                    String responseStr = "";
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    while ((line = reader.readLine()) != null)
+                        responseStr += line + "\n";
+                    HTTPResponse response = HTTPResponse.parseString(responseStr);
                     System.out.println(response);
                     System.out.println();
                 } catch (Exception e) {

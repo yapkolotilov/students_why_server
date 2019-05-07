@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /** Сервер.
  */
@@ -64,11 +66,12 @@ public class Server {
             return;
         }
 
+        ExecutorService service = Executors.newFixedThreadPool(64);
         // Слушаем подключения:
         int id = 0;
         while (true) {
             try {
-                new Session(serverSocket.accept(), id++);
+                service.submit(new Session(serverSocket.accept(), id++));
             } catch (IOException e) {
                 Console.println("ОШИБКА ПРИ СОЗДАНИИ СЕССИИ!");
                 e.printStackTrace();
