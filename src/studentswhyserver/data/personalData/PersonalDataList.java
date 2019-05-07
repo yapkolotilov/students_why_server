@@ -206,6 +206,6 @@ public class PersonalDataList implements Serializable {
         for (int i = 0; i < content.length(); i++) {
             result = result*31 + content.charAt(i);
         }
-        return new Integer(result).toString();
+        return new Integer(Math.abs(result)).toString();
     }
 }
