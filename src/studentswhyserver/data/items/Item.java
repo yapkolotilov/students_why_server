@@ -1,5 +1,7 @@
 package studentswhyserver.data.items;
 
+import studentswhyserver.exceptions.NoSuchElemException;
+
 import java.io.Serializable;
 
 /** Представляет новость или часто задаваемый вопрос.
@@ -10,6 +12,7 @@ public class Item implements Serializable {
     private String header; // Заголовок новости.
     private String content; // Контент новости.
     private String publishDate; // Дата публикации.
+    private int rating;
 
     public String getHeader() {
         return header;
@@ -37,6 +40,16 @@ public class Item implements Serializable {
 
     public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public void like() {
+        rating++;
+    }
+
+    public void dislike() throws NoSuchElemException {
+        if (rating == 0)
+            throw new NoSuchElemException("0 likes!");
+        rating--;
     }
 
     @Override

@@ -378,6 +378,11 @@ public class Session extends Thread {
                     return proceedRemoveQuestionFromTag();
                 case "Remove-Question":
                     return proceedRemoveQuestion();
+
+                case "Like":
+                    return proceedLike();
+                case "Dislike":
+                    return proceedDislike();
             }
         }
 
@@ -1800,6 +1805,76 @@ public class Session extends Thread {
         response.setResult(Result.FAIL);
         response.setBody("Неправильные данные!");
         return response;
+    }
+
+    private HTTPResponse proceedLike() {
+        if (!checkHeaders("Token", "Item")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Item!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String itemName = request.getHeader("Item");
+
+        if (Server.userPasswords.validate(token) || Server.adminPasswords.validate(token) ||
+        PersonalDataList.validateSudo(token)) {
+            Item item;
+            try {
+                // Ищем среди новостей:
+                item = Server.newsFeed.getItem(itemName);
+            } catch (NoSuchElemException e) {
+                try {
+                    item = Server.studentsWhy.getQuestion(itemName);
+                } catch (NoSuchElemException e1) {
+                    HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.FAIL);
+                    response.setBody("Нет такого элемента!");
+                    return response;
+                }
+            }
+
+            item.like();
+        }
+
+        return new HTTPResponse(HTTPCode.OK_200, Result.SUCCESS);
+    }
+
+    private HTTPResponse proceedDislike() {
+        if (!checkHeaders("Token", "Item")) {
+            HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
+            response.setBody("Нужны заголовки Token, Item!");
+            return response;
+        }
+
+        String token = request.getHeader("Token");
+        String itemName = request.getHeader("Item");
+
+        if (Server.userPasswords.validate(token) || Server.adminPasswords.validate(token) ||
+                PersonalDataList.validateSudo(token)) {
+            Item item;
+            try {
+                // Ищем среди новостей:
+                item = Server.newsFeed.getItem(itemName);
+            } catch (NoSuchElemException e) {
+                try {
+                    item = Server.studentsWhy.getQuestion(itemName);
+                } catch (NoSuchElemException e1) {
+                    HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.FAIL);
+                    response.setBody("Нет такого элемента!");
+                    return response;
+                }
+            }
+
+            try {
+                item.dislike();
+            } catch (NoSuchElemException e) {
+                HTTPResponse response = new HTTPResponse(HTTPCode.OK_200, Result.FAIL);
+                response.setBody("Нулевой рейтинг!");
+                return response;
+            }
+        }
+
+        return new HTTPResponse(HTTPCode.OK_200, Result.SUCCESS);
     }
 
 

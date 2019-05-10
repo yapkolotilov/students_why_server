@@ -82,6 +82,7 @@ UML-диаграмма классов:
 **String header** - Заголовок новости.  
 **String content** - Контент новости.  
 **String publishDate** - Дата публикации в формате DD.MM.YYYY HH:MM. 
+**int rating** - Рейтинг новости.
 
 ## Event
 **String header** - Заголовок новости.  
@@ -623,6 +624,34 @@ UML-диаграмма классов:
 
 ---
 # Работа с новостями
+
+## Добавление лайка
+Добавляет лайк.
+
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Like  
+> Token: {token}  
+> Item: {item}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
+
+## Добавление дизлайка
+Добавляет дизлайк.
+
+### Запрос
+> PUT / HTTP/1.1  
+> Action: Dislike  
+> Token: {token}  
+> Item: {item}
+
+### Ответ
+> HTTP/1.1 200 OK  
+> Result: {result}
+
 
 ## Получение новостей
 Получает JSON-список всех новостей и событий.
