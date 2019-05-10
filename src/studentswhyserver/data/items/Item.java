@@ -27,6 +27,14 @@ public class Item implements Serializable {
         return matches(header) && matches(clazz);
     }
 
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }

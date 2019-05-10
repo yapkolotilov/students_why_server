@@ -11,6 +11,10 @@ public class Event extends Item {
     private double longitude; // Долгота.
     private String place; // Дополнительная информация.
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return super.toString() + String.format("date: %s, coords: %sx%s, place: %s", date, latitude, longitude,place);

@@ -540,7 +540,7 @@ public class Session extends Thread {
         // Логин как суперадмин:
         if (Server.adminPasswords.validateSudo(login, password)) {
             response.setResult(Result.SUCCESS);
-            response.setHeader("User-Type", "User");
+            response.setHeader("User-Type", "Admin");
 
             response.setParam("login", PersonalDataList.sudoData.getLogin());
             response.setParam("name", "SuperAdmin");
@@ -572,7 +572,7 @@ public class Session extends Thread {
             try {
                 PersonalData data = Server.adminPasswords.getByLogin(login);
                 response.setResult(Result.SUCCESS);
-                response.setHeader("User-Type", "User");
+                response.setHeader("User-Type", "Admin");
 
                 response.setParam("login", data.getLogin());
                 response.setParam("name", Server.programs.getUser(login).getName());
