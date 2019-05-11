@@ -6,7 +6,6 @@ import studentswhyserver.http.HTTPResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 
 /** Содержит общие для всех классов статические методы.
  *
@@ -20,7 +19,7 @@ public class GlobalMethods {
     public static String readString(InputStream inputStream) throws IOException {
         byte[] bytes = new byte[100 * 1024];
         int length = inputStream.read(bytes);
-        return new String(bytes, 0, length, Charset.forName("UTF-8"));
+        return new String(bytes, 0, length);
     }
 
     /** Считывает строку из входного потока данных.
@@ -32,7 +31,7 @@ public class GlobalMethods {
     private static String readString(InputStream inputStream, int contentLength) throws IOException {
         byte[] bytes = new byte[contentLength];
         int length = inputStream.read(bytes);
-        return new String(bytes, 0, length, Charset.forName("UTF-8"));
+        return new String(bytes, 0, length);
     }
 
 

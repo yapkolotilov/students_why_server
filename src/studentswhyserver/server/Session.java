@@ -45,6 +45,7 @@ public class Session extends Thread {
         this.id = id;
 
         printlnlnMessage("Начата.");
+        start();
     }
 
     @Override
