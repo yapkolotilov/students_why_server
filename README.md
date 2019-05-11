@@ -78,9 +78,10 @@ UML-диаграмма классов:
 **String schedule** - Время преподавания: формат {начало}-{конец} с номерами соотв. модулей    
 **String url** - Ссылка на страницу дисциплины  
 
-## Item 
-**String header** - Заголовок новости.  
-**String content** - Контент новости.  
+## Item
+Новость или вопрос  
+**String header** - Заголовок новости или вопроса.  
+**String content** - Контент новости или вопроса.  
 **String publishDate** - Дата публикации в формате DD.MM.YYYY HH:MM. 
 
 ## Event
@@ -503,7 +504,6 @@ UML-диаграмма классов:
 ### Запрос
 > PUT / HTTP/1.1  
 > Action: Add-Discipline  
-> Discipline: {discipline}  
 > Program: {program}  
 >
 > {JSON-сериализованная дисциплина}
