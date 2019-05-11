@@ -119,7 +119,7 @@ public class StudentsWhyTree extends DataTree {
     }
 
     synchronized public void changeTag(String name, String newValue) throws NoSuchElemException, DuplicateElemException {
-        DataTreeNode tag = getTag(name);
+        DataTreeNode tag = getNode(name);
         changeNode(tag, newValue);
     }
 

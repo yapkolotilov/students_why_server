@@ -19,7 +19,7 @@ public class Item implements Serializable {
     }
 
     public boolean matches(String header) {
-        return header.equals(header);
+        return this.header.equals(header);
     }
 
     public boolean matches(Class clazz) {

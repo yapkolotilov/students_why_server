@@ -2722,7 +2722,7 @@ public class Session extends Thread {
     }
 
     private HTTPResponse proceedRemoveQuestion() {
-        if (!checkHeaders("Token, Question")) {
+        if (!checkHeaders("Token", "Question")) {
             HTTPResponse response = new HTTPResponse(HTTPCode.BAD_REQUEST_400);
             response.setBody("Нужны заголовки Token, Question!");
             return response;

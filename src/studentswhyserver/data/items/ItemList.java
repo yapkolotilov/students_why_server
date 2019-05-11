@@ -222,7 +222,7 @@ public class ItemList implements Serializable {
     public String toString() {
         String result = "";
         for (Item item: items) {
-            result += item;
+            result += item + "\n";
         }
         return result;
     }
